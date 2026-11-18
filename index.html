@@ -2,7 +2,12 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#FFDE59" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Ular Tangga" />
+  <link rel="apple-touch-icon" href="./assets/characters/char_1_red.png" />
   <title>Ular Tangga Sejarah — Neo-Brutalist Edition</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,53 +16,154 @@
   <!-- Custom Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-[#FFFDF5] text-black font-['Space_Grotesk'] select-none overflow-x-hidden min-h-screen" oncontextmenu="return false;" ondragstart="return false;">
+<body class="bg-[#FFFDF5] text-black font-['Space_Grotesk'] select-none overflow-x-hidden min-h-[100dvh]" oncontextmenu="return false;" ondragstart="return false;">
 
   <!-- ==========================================
        FLOATING AUDIO QUICK TOGGLE (POJOK KANAN BAWAH)
        ========================================== -->
-  <button id="btn-quick-audio" class="fixed bottom-4 right-4 z-50 neo-btn bg-[#FFDE59] px-3.5 py-2 font-['JetBrains_Mono'] text-xs font-black uppercase flex items-center gap-2">
+  <button id="btn-quick-audio" class="fixed bottom-3 right-3 z-50 neo-btn bg-[#FFDE59] px-3 py-1.5 font-['JetBrains_Mono'] text-[11px] font-black uppercase flex items-center gap-1.5">
     <span id="quick-audio-icon">🔊</span>
-    <span id="quick-audio-label">Audio: ON</span>
+    <span id="quick-audio-label" class="hidden sm:inline">Audio: ON</span>
   </button>
 
   <!-- ==========================================
-       SCREEN 1: MAIN MENU
+       SCREEN 1: MAIN MENU (POLISHED & LIVELY)
        ========================================== -->
-  <section id="screen-main-menu" class="relative w-full min-h-screen flex flex-col items-center justify-center p-6 bg-cover bg-center" style="background-image: url('./assets/ui_main_menu/main_menu_bg.png')">
-    <div class="absolute inset-0 bg-black/15 pointer-events-none"></div>
+  <section id="screen-main-menu" class="relative w-full min-h-[100dvh] flex flex-col items-center justify-between p-4 sm:p-6 bg-cover bg-center overflow-hidden" style="background-image: url('./assets/ui_main_menu/main_menu_bg.png')">
+    <!-- Vignette & Animated Jungle Fireflies Layer -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/40 pointer-events-none"></div>
+    <div id="menu-fireflies" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
 
-    <!-- Center Game Title Logo -->
-    <div class="relative z-10 mb-2 transform hover:scale-105 transition-transform duration-200">
-      <img src="./assets/ui_main_menu/game_title_logo.png" alt="Game Title Logo" draggable="false" class="protected-img w-64 md:w-80 drop-shadow-[6px_6px_0px_rgba(0,0,0,1)]" />
+    <!-- Top Quick Bar: Edition Tag, Install App & Fullscreen -->
+    <header class="relative z-20 w-full max-w-5xl flex items-center justify-between gap-2">
+      <div class="neo-badge bg-[#7ED957] px-3 py-1 text-[11px] sm:text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+        <span class="inline-block w-2 h-2 bg-black rounded-full animate-ping"></span>
+        <span>Edisi Sejarah Nusantara</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-install-app" type="button" class="neo-btn bg-[#5CE1E6] px-3 py-1.5 text-[11px] sm:text-xs font-black uppercase flex items-center gap-1.5">
+          <span>📲</span>
+          <span>Install di HP</span>
+        </button>
+        <button id="btn-menu-fullscreen" type="button" class="neo-btn bg-[#FFDE59] px-3 py-1.5 text-[11px] sm:text-xs font-black uppercase flex items-center gap-1.5" title="Mode Layar Penuh">
+          <span class="fullscreen-icon">⛶</span>
+          <span class="fullscreen-label hidden sm:inline">Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Center Stage: Animated Title Logo + Character Showcase + Menu Panel -->
+    <div class="relative z-10 flex flex-col items-center justify-center my-auto py-2 w-full max-w-lg">
+      <!-- Floating Title Logo -->
+      <div class="relative z-20 mb-1 sm:mb-2 menu-logo-float">
+        <img src="./assets/ui_main_menu/game_title_logo.png" alt="Game Title Logo" draggable="false" class="protected-img w-60 sm:w-80 drop-shadow-[6px_6px_0px_rgba(0,0,0,1)]" />
+      </div>
+
+      <!-- Interactive Stage Wrapper with Peeking Characters -->
+      <div class="relative flex items-center justify-center w-full">
+        <!-- Left Peeking Characters -->
+        <div class="hidden sm:flex flex-col gap-3 -mr-5 z-0 pointer-events-none">
+          <img src="./assets/characters/char_1_red.png" alt="Red Explorer" draggable="false" class="protected-img w-20 h-20 object-contain menu-char-bob-1" />
+          <img src="./assets/characters/char_3_yellow.png" alt="Yellow Explorer" draggable="false" class="protected-img w-20 h-20 object-contain menu-char-bob-2" />
+        </div>
+
+        <!-- Menu Panel Container (Original Asset Frame) -->
+        <div class="relative z-10 w-[285px] sm:w-[335px] aspect-[1/1.05] flex flex-col items-center justify-center pt-12 pb-8 px-9 gap-3.5 bg-no-repeat bg-contain bg-center drop-shadow-[8px_8px_0px_rgba(0,0,0,0.9)]" style="background-image: url('./assets/ui_main_menu/menu_panel_container.png')">
+          <button id="btn-open-play" class="menu-img-btn w-44 sm:w-52 focus:outline-none" aria-label="Play Game">
+            <img src="./assets/ui_icons/btn_menu_play.png" alt="Play" draggable="false" class="protected-img w-full h-auto block" />
+          </button>
+
+          <button id="btn-open-settings" class="menu-img-btn w-44 sm:w-52 focus:outline-none" aria-label="Settings">
+            <img src="./assets/ui_icons/btn_menu_settings.png" alt="Settings" draggable="false" class="protected-img w-full h-auto block" />
+          </button>
+
+          <button id="btn-open-about" class="menu-img-btn w-44 sm:w-52 focus:outline-none" aria-label="About">
+            <img src="./assets/ui_icons/btn_menu_about.png" alt="About" draggable="false" class="protected-img w-full h-auto block" />
+          </button>
+        </div>
+
+        <!-- Right Peeking Characters -->
+        <div class="hidden sm:flex flex-col gap-3 -ml-5 z-0 pointer-events-none">
+          <img src="./assets/characters/char_2_blue.png" alt="Blue Explorer" draggable="false" class="protected-img w-20 h-20 object-contain menu-char-bob-2" />
+          <img src="./assets/characters/char_4_green.png" alt="Green Explorer" draggable="false" class="protected-img w-20 h-20 object-contain menu-char-bob-1" />
+        </div>
+      </div>
+
+      <!-- Mobile Character Parade Bar (Only shown on mobile for extra character vibe) -->
+      <div class="flex sm:hidden items-center justify-center gap-3 mt-3 bg-black/50 backdrop-blur-xs border-2 border-black px-4 py-1.5 rounded-full shadow-[3px_3px_0px_#000]">
+        <img src="./assets/characters/char_1_red.png" alt="P1" draggable="false" class="protected-img w-9 h-9 object-contain menu-char-bob-1" />
+        <img src="./assets/characters/char_2_blue.png" alt="P2" draggable="false" class="protected-img w-9 h-9 object-contain menu-char-bob-2" />
+        <img src="./assets/characters/char_3_yellow.png" alt="P3" draggable="false" class="protected-img w-9 h-9 object-contain menu-char-bob-1" />
+        <img src="./assets/characters/char_4_green.png" alt="P4" draggable="false" class="protected-img w-9 h-9 object-contain menu-char-bob-2" />
+      </div>
     </div>
 
-    <!-- Menu Panel Container -->
-    <div class="relative z-10 w-[300px] sm:w-[340px] aspect-[1/1.05] flex flex-col items-center justify-center pt-12 pb-8 px-10 gap-4 bg-no-repeat bg-contain bg-center drop-shadow-[8px_8px_0px_rgba(0,0,0,0.85)]" style="background-image: url('./assets/ui_main_menu/menu_panel_container.png')">
-      <button id="btn-open-play" class="menu-img-btn w-48 sm:w-52 focus:outline-none" aria-label="Play Game">
-        <img src="./assets/ui_icons/btn_menu_play.png" alt="Play" draggable="false" class="protected-img w-full h-auto block" />
-      </button>
-
-      <button id="btn-open-settings" class="menu-img-btn w-48 sm:w-52 focus:outline-none" aria-label="Settings">
-        <img src="./assets/ui_icons/btn_menu_settings.png" alt="Settings" draggable="false" class="protected-img w-full h-auto block" />
-      </button>
-
-      <button id="btn-open-about" class="menu-img-btn w-48 sm:w-52 focus:outline-none" aria-label="About">
-        <img src="./assets/ui_icons/btn_menu_about.png" alt="About" draggable="false" class="protected-img w-full h-auto block" />
-      </button>
-    </div>
+    <!-- Bottom Feature Pills -->
+    <footer class="relative z-20 flex flex-wrap items-center justify-center gap-2 text-[10px] sm:text-xs font-['JetBrains_Mono'] font-extrabold pb-1">
+      <span class="bg-[#FFDE59] border-2 border-black px-2.5 py-1 shadow-[2px_2px_0px_#000]">🤖 VS AI BOT / PVP</span>
+      <span class="bg-white border-2 border-black px-2.5 py-1 shadow-[2px_2px_0px_#000]">📜 KUIS SEJARAH A-E & ESAI</span>
+      <span class="bg-[#D9F99D] border-2 border-black px-2.5 py-1 shadow-[2px_2px_0px_#000]">⚡ 12 KARTU LUCK STREAK</span>
+    </footer>
   </section>
+
+  <!-- ==========================================
+       MODAL: INSTALL DI HP & FULLSCREEN GUIDE
+       ========================================== -->
+  <div id="modal-install-guide" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div class="neo-box bg-[#FFFDF5] w-full max-w-md p-6 relative">
+      <div class="bg-[#5CE1E6] border-4 border-black px-4 py-1.5 -mt-10 mb-4 inline-block shadow-[4px_4px_0px_#000]">
+        <h2 class="text-lg sm:text-xl font-black uppercase text-black">📲 Pasang & Fullscreen di HP</h2>
+      </div>
+
+      <p class="text-xs sm:text-sm font-bold mb-4 leading-relaxed">
+        Mainkan <strong>Ular Tangga Sejarah</strong> dengan layar penuh tanpa gangguan <em>address bar</em> seperti aplikasi native di HP kamu:
+      </p>
+
+      <!-- Tombol Instant Fullscreen -->
+      <button id="btn-modal-trigger-fullscreen" type="button" class="neo-btn bg-[#7ED957] w-full py-3 px-4 font-black uppercase text-xs sm:text-sm mb-4 flex items-center justify-center gap-2">
+        <span>⛶</span>
+        <span>Aktifkan Mode Layar Penuh Sekarang</span>
+      </button>
+
+      <!-- Tombol Native PWA Install (Muncul jika browser mendukung prompt langsung) -->
+      <button id="btn-modal-native-install" type="button" class="hidden neo-btn bg-[#FFDE59] w-full py-3 px-4 font-black uppercase text-xs sm:text-sm mb-4 flex items-center justify-center gap-2">
+        <span>📥</span>
+        <span>Install Aplikasi Langsung (1-Klik)</span>
+      </button>
+
+      <div class="space-y-2.5 text-xs font-bold mb-5">
+        <div class="border-2 border-black bg-white p-3 shadow-[2px_2px_0px_#000]">
+          <div class="font-black uppercase text-[#16A34A] mb-1">🤖 Pengguna Android (Chrome / Edge):</div>
+          <p class="text-neutral-700 leading-snug">
+            Ketuk ikon titik tiga <strong>(⋮)</strong> di pojok kanan atas browser, lalu pilih <strong>"Tambahkan ke Layar Utama"</strong> atau <strong>"Install Aplikasi"</strong>.
+          </p>
+        </div>
+
+        <div class="border-2 border-black bg-white p-3 shadow-[2px_2px_0px_#000]">
+          <div class="font-black uppercase text-[#2563EB] mb-1">🍎 Pengguna iPhone / iPad (Safari):</div>
+          <p class="text-neutral-700 leading-snug">
+            Ketuk tombol <strong>Bagikan (Share ⬆️)</strong> di bagian bawah Safari, lalu gulir dan pilih <strong>"Tambah ke Layar Utama" (Add to Home Screen)</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button id="btn-close-install" type="button" class="neo-btn bg-[#FFDE59] px-5 py-2 font-black uppercase text-xs">Siap, Mengerti</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ==========================================
        MODAL: SETUP PERMAINAN (PEMAIN, MODE BOT, & KESULITAN)
        ========================================== -->
   <div id="modal-player-select" class="hidden fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4">
-    <div class="neo-box bg-[#FFFDF5] w-full max-w-lg p-6 relative max-h-[92vh] overflow-y-auto">
+    <div class="neo-box bg-[#FFFDF5] w-full max-w-lg p-5 sm:p-6 relative max-h-[92vh] overflow-y-auto">
       <div class="bg-[#FF5757] border-4 border-black px-4 py-2 -mt-10 mb-5 inline-block shadow-[4px_4px_0px_#000]">
         <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-white">Setup Pertandingan</h2>
       </div>
 
-      <!-- 1. Pilih Mode Lawan (Manusia vs Bot AI) -->
+      <!-- 1. Pilih Mode Lawan -->
       <div class="mb-4">
         <label class="block text-xs font-black uppercase tracking-wider mb-2">1. Pilih Mode Lawan:</label>
         <div class="grid grid-cols-2 gap-3">
@@ -70,7 +176,7 @@
         </div>
       </div>
 
-      <!-- 2. Pilih Jumlah Total Pemain (2 - 4) -->
+      <!-- 2. Pilih Jumlah Total Pemain -->
       <div class="mb-4">
         <label class="block text-xs font-black uppercase tracking-wider mb-2">2. Jumlah Total Pemain di Papan:</label>
         <div class="grid grid-cols-3 gap-3">
@@ -99,21 +205,19 @@
           </button>
         </div>
         <p id="bot-diff-desc" class="text-[11px] font-bold text-neutral-700 leading-snug">
-          Bot memiliki akurasi kuis sejarah ~70%, bermain taktis, dan aktif berkomentar di Live Chat.
+          Bot memiliki akurasi kuis sejarah ~72%, bermain taktis, dan aktif berkomentar di Live Chat.
         </p>
 
-        <!-- Kustomisasi Slot P1-P4 (Manusia / Bot) -->
+        <!-- Kustomisasi Slot P1-P4 -->
         <div class="pt-1">
-          <div class="text-[11px] font-black uppercase mb-1.5">Status Slot Pemain (Klik untuk ubah Manusia/Bot):</div>
-          <div id="slot-preview-container" class="grid grid-cols-2 gap-2">
-            <!-- Diisi otomatis oleh game.js -->
-          </div>
+          <div class="text-[11px] font-black uppercase mb-1.5">Status Slot Pemain (Klik untuk ubah Orang/Bot):</div>
+          <div id="slot-preview-container" class="grid grid-cols-2 gap-2"></div>
         </div>
       </div>
 
       <div class="flex justify-between items-center gap-3">
-        <button id="btn-cancel-select" type="button" class="neo-btn bg-white px-5 py-2.5 font-black uppercase text-sm">Batal</button>
-        <button id="btn-start-match" type="button" class="neo-btn bg-[#7ED957] px-6 py-2.5 font-black uppercase text-sm flex-1">
+        <button id="btn-cancel-select" type="button" class="neo-btn bg-white px-4 py-2.5 font-black uppercase text-xs sm:text-sm">Batal</button>
+        <button id="btn-start-match" type="button" class="neo-btn bg-[#7ED957] px-5 py-2.5 font-black uppercase text-xs sm:text-sm flex-1">
           Mulai Pertandingan &rarr;
         </button>
       </div>
@@ -145,7 +249,7 @@
   </div>
 
   <!-- ==========================================
-       MODAL: INTERACTIVE GAME SETTINGS (+ GEMINI API CONFIG)
+       MODAL: INTERACTIVE GAME SETTINGS
        ========================================== -->
   <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4">
     <div class="neo-box bg-[#FFFDF5] w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
@@ -202,7 +306,7 @@
             <span class="bg-[#7ED957] border border-black px-1.5 py-0.5 text-[10px] font-black">AKTIF OTOMATIS</span>
           </div>
           <p class="text-[11px] text-neutral-700 leading-relaxed">
-            Bot sudah dilengkapi <strong>Smart Gemini Persona Engine</strong> bawaan yang bisa langsung mengobrol tanpa API Key. Jika ingin memakai kuota Cloud Gemini API pribadi Anda (`gemini-2.5-flash`), masukkan API Key di bawah (opsional):
+            Bot dilengkapi <strong>Smart Gemini Persona Engine</strong> bawaan yang bisa langsung mengobrol. Opsional: masukkan API Key Cloud Gemini (`gemini-2.5-flash`) di bawah:
           </p>
           <input id="setting-gemini-key" type="password" placeholder="Opsional: Paste Gemini API Key (AIzaSy...)" autocomplete="off" class="w-full border-2 border-black bg-[#FFFDF5] px-3 py-1.5 text-xs font-['JetBrains_Mono'] shadow-[2px_2px_0px_#000]" />
         </div>
@@ -234,7 +338,6 @@
         <h2 class="text-2xl font-black uppercase text-black">📖 Panduan & Tim Kreator</h2>
       </div>
 
-      <!-- Tab Switcher inside About -->
       <div class="flex gap-3 mb-5">
         <button id="tab-btn-howto" class="neo-btn bg-[#FFDE59] px-4 py-2 font-black uppercase text-xs sm:text-sm">
           1. Cara Bermain
@@ -250,7 +353,7 @@
           <h3 class="font-black text-base uppercase mb-2 bg-[#7ED957] inline-block px-2 border-2 border-black">🎯 Aturan Dasar, Bot AI & Papan</h3>
           <ul class="list-disc pl-5 space-y-1.5">
             <li>Setiap pemain memulai dari <strong>Petak 1</strong> dan bergiliran mengocok dadu (1–6) untuk mencapai <strong>Petak 100</strong>.</li>
-            <li>Kamu bisa bermain bersama teman (PvP) atau melawan <strong>AI Bot</strong> dengan tingkat kesulitan <em>Mudah</em>, <em>Normal</em>, atau <em>Sulit</em> yang aktif mengobrol di kolom <strong>Live Chat Gemini AI</strong>.</li>
+            <li>Bisa dimainkan bersama teman (PvP) atau melawan <strong>AI Bot</strong> (Mudah, Normal, Sulit) yang aktif mengobrol di <strong>Room Chat Gemini AI</strong>.</li>
             <li><strong>Tangga (▲):</strong> Berhenti di kaki tangga (Petak 8, 20, 26, 56, 70, 77) membawa bidak naik ke puncak tangga.</li>
             <li><strong>Ular (▼):</strong> Berhenti di kepala ular (Petak 37, 48, 67, 81, 82, 94) membuat bidak turun ke ekor ular.</li>
           </ul>
@@ -261,29 +364,15 @@
           <ul class="list-disc pl-5 space-y-1.5">
             <li>Kuis Sejarah <strong>hanya muncul jika bidak berhenti tepat di petak bertanda `?`</strong> pada papan.</li>
             <li>Terdapat 2 jenis soal: <strong>Pilihan Ganda 5 Opsi (A, B, C, D, E)</strong> dan <strong>Esai Singkat</strong>.</li>
-            <li><strong>Jawaban Benar:</strong> Mendapatkan hadiah <strong>Maju +2 Petak Bonus</strong> dan +100 Poin Sejarah!</li>
+            <li><strong>Jawaban Benar:</strong> Hadiah <strong>Maju +2 Petak Bonus</strong> dan +100 Poin Sejarah!</li>
             <li><strong>Jawaban Salah / Waktu Habis:</strong> Penalti mundur 1 petak beserta penjelasan fakta sejarahnya.</li>
           </ul>
-        </div>
-
-        <div class="border-3 border-black bg-white p-4 shadow-[4px_4px_0px_#000]">
-          <h3 class="font-black text-base uppercase mb-2 bg-[#FF5757] text-white inline-block px-2 border-2 border-black">⚡ Kartu Luck Streak (Buff & Debuff)</h3>
-          <p class="mb-2">Dapatkan dadu angka <strong>6</strong> atau panjat <strong>Tangga</strong> untuk memicu undian 3 Kartu Misteri:</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-            <div class="bg-[#D9F99D] border-2 border-black p-2">
-              <strong>6 BUFF:</strong> Lompat Kangguru (+3 langkah), Sepatu Angin (+2 dadu berikutnya), Perisai Anti-Ular, Dadu Ganda (Giliran ekstra), Jalur Pintas (+10 petak), Tukar Posisi.
-            </div>
-            <div class="bg-[#FECACA] border-2 border-black p-2">
-              <strong>6 DEBUFF:</strong> Akar Pengikat (Skip 1 giliran), Beban Besi (-2 dadu berikutnya), Ular Lapar (-2 langkah), Angin Tornado (Dorong lawan sekitar), Roda Karma, & Zonk.
-            </div>
-          </div>
         </div>
       </div>
 
       <!-- TAB 2: 2 CREATOR CARDS (DIKUNCI STATIS) -->
       <div id="about-tab-creators" class="hidden">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <!-- CREATOR CARD 1 -->
           <div class="neo-box bg-white p-5 flex flex-col items-center text-center">
             <div class="bg-[#FF5757] text-white border-2 border-black px-3 py-0.5 text-xs font-black uppercase mb-3 shadow-[2px_2px_0px_#000]">
               Creator #1 — Lead Developer
@@ -299,7 +388,6 @@
             </p>
           </div>
 
-          <!-- CREATOR CARD 2 -->
           <div class="neo-box bg-white p-5 flex flex-col items-center text-center">
             <div class="bg-[#38B6FF] text-black border-2 border-black px-3 py-0.5 text-xs font-black uppercase mb-3 shadow-[2px_2px_0px_#000]">
               Creator #2 — Visual & Level Designer
@@ -324,14 +412,55 @@
   </div>
 
   <!-- ==========================================
-       SCREEN 2: GAMEPLAY SCREEN
+       SCREEN 2: GAMEPLAY SCREEN (MOBILE-FRIENDLY HANDHELD + DESKTOP 3-COL)
        ========================================== -->
-  <section id="screen-gameplay" class="hidden w-full min-h-screen flex flex-col lg:flex-row items-stretch justify-between p-4 gap-4 bg-[#E5E0D8]">
+  <section id="screen-gameplay" class="hidden w-full min-h-[100dvh] flex flex-col lg:flex-row items-stretch justify-between p-2.5 sm:p-4 pb-16 lg:pb-4 gap-3 sm:gap-4 bg-[#E5E0D8]">
     
-    <!-- LEFT PANEL: PLAYER STATS (2-COLUMN GRID) & CONTROLS -->
-    <aside class="w-full lg:w-[350px] shrink-0 flex flex-col gap-3.5 order-2 lg:order-1">
-      <!-- Top Bar Navigation -->
-      <div class="neo-box bg-white p-3 flex items-center justify-between gap-2">
+    <!-- MOBILE STICKY TOP BAR (Hanya tampil di Mobile < lg agar hemat ruang & mudah dijangkau) -->
+    <div class="flex lg:hidden neo-box bg-white p-2 items-center justify-between gap-1.5 order-1">
+      <button id="btn-back-menu-mobile" class="neo-btn bg-[#FF5757] text-white px-2.5 py-1 text-[11px] font-black uppercase">
+        &larr; Menu
+      </button>
+      <span id="turn-badge-mobile" class="font-['JetBrains_Mono'] font-extrabold text-[11px] bg-[#FFDE59] border-2 border-black px-2 py-0.5 shadow-[2px_2px_0px_#000]">
+        TURN: P1
+      </span>
+      <div class="flex items-center gap-1">
+        <button id="btn-hud-fullscreen-mobile" class="neo-btn bg-[#5CE1E6] px-2 py-1 text-[11px] font-black" title="Layar Penuh">
+          <span class="fullscreen-icon">⛶</span>
+        </button>
+        <button id="btn-ingame-settings-mobile" class="neo-btn bg-[#FFDE59] px-2 py-1 text-[11px] font-black" title="Pengaturan">
+          ⚙️
+        </button>
+        <button id="btn-restart-game-mobile" class="neo-btn bg-white px-2 py-1 text-[11px] font-black uppercase">
+          🔄
+        </button>
+      </div>
+    </div>
+
+    <!-- CENTER AREA: 10x10 GAME BOARD (Langsung di atas pada tampilan Mobile!) -->
+    <main class="flex-1 flex items-center justify-center order-2 lg:order-2">
+      <div id="board-wrapper" class="relative w-full max-w-[640px] board-clean-frame">
+        <!-- Base 2D Board Image -->
+        <img src="./assets/board/main_board_2d.png" alt="Snakes and Ladders 2D Board" draggable="false" class="protected-img w-full h-auto block" />
+        
+        <!-- Calibrated Inner 10x10 Grid Overlay -->
+        <div id="board-grid" class="board-playable-area grid grid-cols-10 grid-rows-10 pointer-events-none"></div>
+
+        <!-- Pawns Overlay Layer -->
+        <div id="pawns-layer" class="board-playable-area pointer-events-none"></div>
+
+        <!-- Skill FX Banner Overlay on Board -->
+        <div id="board-fx-banner" class="hidden absolute inset-x-4 sm:inset-x-6 top-1/2 -translate-y-1/2 z-40 neo-box bg-[#FFDE59] p-3 sm:p-4 text-center pointer-events-none">
+          <div id="board-fx-title" class="text-base sm:text-xl font-black uppercase"></div>
+          <div id="board-fx-sub" class="text-[11px] sm:text-xs font-bold mt-1"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- LEFT PANEL: DICE ROLLER & CONTENDERS -->
+    <aside class="w-full lg:w-[350px] shrink-0 flex flex-col gap-3 order-3 lg:order-1">
+      <!-- Desktop Top Bar Navigation (Hidden on Mobile because Mobile has its own compact top bar) -->
+      <div class="hidden lg:flex neo-box bg-white p-3 items-center justify-between gap-2">
         <button id="btn-back-menu" class="neo-btn bg-[#FF5757] text-white px-3 py-1.5 text-xs font-black uppercase">
           &larr; Menu
         </button>
@@ -339,27 +468,30 @@
           TURN: P1
         </span>
         <div class="flex gap-1.5">
+          <button id="btn-hud-fullscreen" class="neo-btn bg-[#5CE1E6] px-2.5 py-1.5 text-xs font-black" title="Mode Layar Penuh">
+            <span class="fullscreen-icon">⛶</span>
+          </button>
           <button id="btn-ingame-settings" class="neo-btn bg-[#FFDE59] px-2.5 py-1.5 text-xs font-black" title="Pengaturan">
             ⚙️
           </button>
-          <button id="btn-restart-game" class="neo-btn bg-[#5CE1E6] px-2.5 py-1.5 text-xs font-black uppercase">
+          <button id="btn-restart-game" class="neo-btn bg-white px-2.5 py-1.5 text-xs font-black uppercase">
             Reset
           </button>
         </div>
       </div>
 
-      <!-- Dice Control Box -->
-      <div class="neo-box bg-[#FFDE59] p-3.5 flex flex-col items-center">
-        <div class="text-xs font-black uppercase tracking-widest mb-2 bg-black text-white px-3 py-0.5">
-          Dice Roller
+      <!-- Thumb-Friendly Dice Control Box -->
+      <div class="neo-box bg-[#FFDE59] p-3 flex flex-col items-center">
+        <div class="hidden sm:block text-[10px] font-black uppercase tracking-widest mb-1.5 bg-black text-white px-3 py-0.5">
+          Dice Controller
         </div>
-        <div class="flex items-center gap-4 my-1 w-full justify-center">
-          <div id="dice-box" class="w-20 h-20 bg-black border-3 border-black shadow-[4px_4px_0px_#000] flex items-center justify-center overflow-hidden shrink-0">
-            <img id="dice-img" src="./assets/ui_icons/dice_sprites_0.jpg" alt="Dice" draggable="false" class="protected-img w-full h-full object-contain" />
+        <div class="flex items-center gap-3.5 w-full justify-center">
+          <div id="dice-box" class="w-16 h-16 sm:w-20 sm:h-20 bg-black border-3 border-black shadow-[4px_4px_0px_#000] flex items-center justify-center overflow-hidden shrink-0">
+            <img id="dice-img" src="./assets/ui_icons/dice_sprites_0.png" alt="Dice" draggable="false" class="protected-img w-full h-full object-contain" />
           </div>
-          <div class="flex flex-col gap-2 flex-1 max-w-[190px]">
-            <button id="btn-roll-dice" class="neo-btn bg-[#7ED957] px-4 py-3 text-base font-black uppercase tracking-wider w-full">
-              Roll Dice!
+          <div class="flex flex-col gap-1.5 flex-1">
+            <button id="btn-roll-dice" class="neo-btn bg-[#7ED957] px-4 py-2.5 sm:py-3 text-sm sm:text-base font-black uppercase tracking-wider w-full">
+              🎲 Roll Dice!
             </button>
             <div id="dice-result-text" class="font-['JetBrains_Mono'] text-[11px] font-extrabold text-center bg-white border-2 border-black py-1 px-2 truncate">
               Siap mengocok
@@ -368,46 +500,37 @@
         </div>
       </div>
 
-      <!-- Players Roster (1 Baris 2 Kolom Besar & Jelas) -->
-      <div class="neo-box bg-white p-3.5 flex-1 flex flex-col gap-2.5">
-        <div class="flex items-center justify-between border-b-4 border-black pb-1.5">
-          <h3 class="text-base font-black uppercase">Contenders</h3>
-          <span class="text-[11px] font-['JetBrains_Mono'] font-bold bg-[#FFDE59] border-2 border-black px-2 py-0.5">Target: #100</span>
+      <!-- MOBILE VIEW SWITCHER TABS (Hanya muncul di Mobile agar tampilan jauh lebih simpel & tidak panjang) -->
+      <div class="grid grid-cols-3 gap-2 lg:hidden">
+        <button type="button" data-mview="players" class="mobile-view-tab neo-btn bg-[#FFDE59] py-2 px-2 text-[11px] font-black uppercase flex items-center justify-center gap-1">
+          <span>👥</span>
+          <span>Pemain</span>
+        </button>
+        <button type="button" data-mview="chat" class="mobile-view-tab neo-btn bg-white py-2 px-2 text-[11px] font-black uppercase flex items-center justify-center gap-1 relative">
+          <span>💬</span>
+          <span>Chat AI</span>
+          <span id="mobile-chat-dot" class="hidden w-2 h-2 rounded-full bg-[#FF5757] border border-black"></span>
+        </button>
+        <button type="button" data-mview="log" class="mobile-view-tab neo-btn bg-white py-2 px-2 text-[11px] font-black uppercase flex items-center justify-center gap-1">
+          <span>📋</span>
+          <span>Peta & Log</span>
+        </button>
+      </div>
+
+      <!-- Players Roster (1 Baris 2 Kolom Berkarakter) -->
+      <div id="panel-contenders" class="neo-box bg-white p-3 flex-1 flex flex-col gap-2.5">
+        <div class="flex items-center justify-between border-b-3 border-black pb-1">
+          <h3 class="text-sm sm:text-base font-black uppercase">Contenders</h3>
+          <span class="text-[10px] font-['JetBrains_Mono'] font-bold bg-[#FFDE59] border-2 border-black px-2 py-0.5">Target: #100</span>
         </div>
-        <div id="players-container" class="grid grid-cols-2 gap-2.5 flex-1 content-start">
-          <!-- Populated dynamically via game.js -->
-        </div>
+        <div id="players-container" class="grid grid-cols-2 gap-2.5 flex-1 content-start"></div>
       </div>
     </aside>
 
-    <!-- CENTER AREA: 10x10 GAME BOARD -->
-    <main class="flex-1 flex items-center justify-center order-1 lg:order-2">
-      <div id="board-wrapper" class="relative w-full max-w-[640px] board-clean-frame">
-        <!-- Base 2D Board Image -->
-        <img src="./assets/board/main_board_2d.png" alt="Snakes and Ladders 2D Board" draggable="false" class="protected-img w-full h-auto block" />
-        
-        <!-- Calibrated Inner 10x10 Grid Overlay -->
-        <div id="board-grid" class="board-playable-area grid grid-cols-10 grid-rows-10 pointer-events-none">
-          <!-- 100 cells injected by JS -->
-        </div>
-
-        <!-- Pawns Overlay Layer -->
-        <div id="pawns-layer" class="board-playable-area pointer-events-none">
-          <!-- Pawns injected dynamically -->
-        </div>
-
-        <!-- Skill FX Banner Overlay on Board -->
-        <div id="board-fx-banner" class="hidden absolute inset-x-6 top-1/2 -translate-y-1/2 z-40 neo-box bg-[#FFDE59] p-4 text-center pointer-events-none">
-          <div id="board-fx-title" class="text-xl font-black uppercase"></div>
-          <div id="board-fx-sub" class="text-xs font-bold mt-1"></div>
-        </div>
-      </div>
-    </main>
-
     <!-- RIGHT PANEL: BOARD LEGEND, GEMINI AI LIVE CHAT, & ACTION LOG -->
-    <aside class="w-full lg:w-[350px] shrink-0 flex flex-col gap-3.5 order-3 pb-12 lg:pb-0">
+    <aside id="panel-right-sidebar" class="w-full lg:w-[350px] shrink-0 flex flex-col gap-3.5 order-4 lg:order-3">
       <!-- Snakes, Ladders & History Tiles Legend -->
-      <div class="neo-box bg-[#5CE1E6] p-3">
+      <div id="panel-map-legend" class="hidden lg:block neo-box bg-[#5CE1E6] p-3">
         <div class="flex items-center justify-between border-b-3 border-black pb-1 mb-2">
           <h3 class="text-sm font-black uppercase">Peta Papan</h3>
           <span class="bg-[#FFDE59] border-2 border-black px-2 py-0.5 text-[10px] font-black shadow-[1px_1px_0px_#000]">? = KUIS SEJARAH</span>
@@ -425,7 +548,7 @@
       </div>
 
       <!-- GEMINI AI BOT LIVE CHAT BOX -->
-      <div class="neo-box bg-[#FFFDF5] p-3 flex flex-col h-[250px]">
+      <div id="panel-chat-box" class="hidden lg:flex neo-box bg-[#FFFDF5] p-3 flex-col h-[240px] lg:h-[250px]">
         <div class="flex items-center justify-between border-b-3 border-black pb-1.5 mb-2">
           <div class="flex items-center gap-1.5">
             <span class="text-sm font-black uppercase">💬 Room Chat</span>
@@ -436,12 +559,8 @@
           </span>
         </div>
 
-        <!-- Chat Messages Scroll Area -->
-        <div id="chat-messages" class="flex-1 overflow-y-auto space-y-2 pr-1 font-['Space_Grotesk'] text-xs mb-2">
-          <!-- Chat bubbles injected dynamically -->
-        </div>
+        <div id="chat-messages" class="flex-1 overflow-y-auto space-y-2 pr-1 font-['Space_Grotesk'] text-xs mb-2"></div>
 
-        <!-- Chat Input Bar for Player -->
         <div class="flex gap-1.5">
           <input id="chat-input" type="text" placeholder="Sapa atau ledek Bot di sini..." autocomplete="off" class="flex-1 border-2 border-black bg-white px-2.5 py-1.5 text-xs font-bold shadow-[2px_2px_0px_#000] focus:outline-none focus:bg-[#FEF08A]" />
           <button id="btn-send-chat" type="button" class="neo-btn bg-[#FFDE59] px-3 py-1.5 text-xs font-black uppercase">
@@ -451,14 +570,12 @@
       </div>
 
       <!-- Live Action Log -->
-      <div class="neo-box bg-white p-3 flex-1 flex flex-col min-h-[170px] max-h-[220px]">
+      <div id="panel-action-log" class="hidden lg:flex neo-box bg-white p-3 flex-1 flex-col min-h-[170px] max-h-[220px]">
         <div class="flex items-center justify-between border-b-3 border-black pb-1 mb-2">
           <h3 class="text-sm font-black uppercase">Action Log</h3>
           <span class="text-[10px] font-['JetBrains_Mono'] bg-black text-white px-2 py-0.5">LIVE</span>
         </div>
-        <div id="action-log" class="flex-1 overflow-y-auto space-y-1.5 pr-1 font-['JetBrains_Mono'] text-[11px]">
-          <!-- Log entries inserted here -->
-        </div>
+        <div id="action-log" class="flex-1 overflow-y-auto space-y-1.5 pr-1 font-['JetBrains_Mono'] text-[11px]"></div>
       </div>
     </aside>
 
@@ -467,13 +584,13 @@
   <!-- ==========================================
        MODAL: PERTANYAAN SEJARAH (PILIHAN GANDA A-E & ESAI)
        ========================================== -->
-  <div id="modal-history-quiz" class="hidden fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4 overflow-y-auto">
-    <div class="neo-box bg-[#FFFDF5] w-full max-w-xl p-6 relative my-auto">
-      <div class="flex items-center justify-between -mt-10 mb-3">
-        <div id="quiz-type-badge" class="bg-[#FFDE59] border-4 border-black px-4 py-1.5 shadow-[4px_4px_0px_#000] font-black uppercase text-xs sm:text-sm">
+  <div id="modal-history-quiz" class="hidden fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="neo-box bg-[#FFFDF5] w-full max-w-xl p-5 sm:p-6 relative my-auto">
+      <div class="flex items-center justify-between -mt-9 sm:-mt-10 mb-3">
+        <div id="quiz-type-badge" class="bg-[#FFDE59] border-4 border-black px-3 sm:px-4 py-1 sm:py-1.5 shadow-[4px_4px_0px_#000] font-black uppercase text-[11px] sm:text-sm">
           📜 Kuis Sejarah — Pilihan Ganda (A - E)
         </div>
-        <div id="quiz-timer-badge" class="bg-[#FF5757] text-white border-4 border-black px-3 py-1.5 shadow-[4px_4px_0px_#000] font-['JetBrains_Mono'] font-black text-sm">
+        <div id="quiz-timer-badge" class="bg-[#FF5757] text-white border-4 border-black px-2.5 sm:px-3 py-1 sm:py-1.5 shadow-[4px_4px_0px_#000] font-['JetBrains_Mono'] font-black text-xs sm:text-sm">
           ⏱️ 25s
         </div>
       </div>
@@ -482,23 +599,23 @@
         <div id="quiz-player-info" class="text-xs font-['JetBrains_Mono'] font-bold bg-black text-white inline-block px-2.5 py-1">
           Giliran Player 1 • Petak #12
         </div>
-        <div id="quiz-bot-status" class="hidden text-xs font-['JetBrains_Mono'] font-black bg-[#5CE1E6] border-2 border-black px-2.5 py-0.5 shadow-[2px_2px_0px_#000] animate-pulse">
-          🤖 Bot sedang menganalisis sejarah...
+        <div id="quiz-bot-status" class="hidden text-[11px] font-['JetBrains_Mono'] font-black bg-[#5CE1E6] border-2 border-black px-2 py-0.5 shadow-[2px_2px_0px_#000] animate-pulse">
+          🤖 Bot menganalisis...
         </div>
       </div>
 
-      <div id="quiz-question-box" class="border-3 border-black bg-white p-4 shadow-[4px_4px_0px_#000] mb-4">
+      <div id="quiz-question-box" class="border-3 border-black bg-white p-3.5 sm:p-4 shadow-[4px_4px_0px_#000] mb-3.5">
         <p id="quiz-question-text" class="text-sm sm:text-base md:text-lg font-black leading-snug"></p>
       </div>
 
-      <!-- Multiple Choice Options Container (5 Opsi: A, B, C, D, E) -->
-      <div id="quiz-mcq-container" class="grid grid-cols-1 gap-2.5 mb-4"></div>
+      <!-- Multiple Choice Options Container (A, B, C, D, E) -->
+      <div id="quiz-mcq-container" class="grid grid-cols-1 gap-2 mb-3.5"></div>
 
       <!-- Essay Input Container -->
       <div id="quiz-essay-container" class="hidden space-y-3 mb-4">
         <div class="flex flex-col sm:flex-row gap-2">
-          <input id="quiz-essay-input" type="text" placeholder="Ketik jawaban sejarahmu di sini..." autocomplete="off" class="flex-1 border-3 border-black bg-white px-4 py-3 font-bold text-sm shadow-[3px_3px_0px_#000] focus:outline-none focus:bg-[#FEF08A]" />
-          <button id="btn-submit-essay" class="neo-btn bg-[#7ED957] px-5 py-3 font-black uppercase text-sm">
+          <input id="quiz-essay-input" type="text" placeholder="Ketik jawaban sejarahmu di sini..." autocomplete="off" class="flex-1 border-3 border-black bg-white px-4 py-2.5 font-bold text-sm shadow-[3px_3px_0px_#000] focus:outline-none focus:bg-[#FEF08A]" />
+          <button id="btn-submit-essay" class="neo-btn bg-[#7ED957] px-5 py-2.5 font-black uppercase text-sm">
             Jawab &rarr;
           </button>
         </div>
@@ -511,10 +628,10 @@
       </div>
 
       <!-- Quiz Feedback / Explanation Panel -->
-      <div id="quiz-feedback-panel" class="hidden border-3 border-black p-4 shadow-[4px_4px_0px_#000] mb-2">
-        <div id="quiz-feedback-title" class="font-black text-base uppercase mb-1"></div>
-        <p id="quiz-feedback-desc" class="text-xs sm:text-sm font-bold leading-relaxed mb-3"></p>
-        <button id="btn-quiz-continue" class="neo-btn bg-[#FFDE59] px-5 py-2 font-black uppercase text-xs sm:text-sm">
+      <div id="quiz-feedback-panel" class="hidden border-3 border-black p-3.5 shadow-[4px_4px_0px_#000] mb-1">
+        <div id="quiz-feedback-title" class="font-black text-sm sm:text-base uppercase mb-1"></div>
+        <p id="quiz-feedback-desc" class="text-xs font-bold leading-relaxed mb-3"></p>
+        <button id="btn-quiz-continue" class="neo-btn bg-[#FFDE59] px-5 py-2 font-black uppercase text-xs sm:text-sm w-full sm:w-auto">
           Lanjutkan Permainan &rarr;
         </button>
       </div>
@@ -525,24 +642,20 @@
        MODAL: "LUCK STREAK" CARD DRAW
        ========================================== -->
   <div id="modal-luck-streak" class="hidden fixed inset-0 z-50 bg-black/85 flex flex-col items-center justify-center p-4 overflow-y-auto">
-    <div class="neo-box bg-[#FFDE59] px-6 py-3 mb-3 text-center">
-      <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wider">⚡ Luck Streak! ⚡</h2>
-      <p id="luck-streak-subtitle" class="text-xs md:text-sm font-bold mt-1">
+    <div class="neo-box bg-[#FFDE59] px-5 py-2.5 mb-3 text-center">
+      <h2 class="text-xl sm:text-3xl font-black uppercase tracking-wider">⚡ Luck Streak! ⚡</h2>
+      <p id="luck-streak-subtitle" class="text-xs sm:text-sm font-bold mt-0.5">
         Kamu memicu Undian Kartu! Pilih 1 dari 3 kartu misteri di bawah:
       </p>
     </div>
 
-    <!-- 3 Face-down Cards Container -->
-    <div id="luck-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-6 my-3 w-full max-w-3xl place-items-center">
-      <!-- 3 3D Flip Cards generated dynamically by game.js -->
-    </div>
+    <div id="luck-cards-container" class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 my-2 w-full max-w-3xl"></div>
 
-    <!-- Card Outcome & Interactive Skill Panel (Appears after flip) -->
     <div id="luck-outcome-panel" class="hidden neo-box bg-white p-4 max-w-md w-full text-center mt-2">
-      <div id="luck-outcome-title" class="text-xl font-black uppercase mb-1"></div>
-      <p id="luck-outcome-desc" class="text-sm font-bold mb-3"></p>
+      <div id="luck-outcome-title" class="text-lg sm:text-xl font-black uppercase mb-1"></div>
+      <p id="luck-outcome-desc" class="text-xs sm:text-sm font-bold mb-3"></p>
       <div id="luck-interactive-options" class="hidden mb-3 flex flex-wrap gap-2 justify-center"></div>
-      <button id="btn-apply-card" class="neo-btn bg-[#7ED957] px-6 py-2.5 font-black uppercase text-base w-full">
+      <button id="btn-apply-card" class="neo-btn bg-[#7ED957] px-6 py-2.5 font-black uppercase text-sm sm:text-base w-full">
         Aktifkan Efek Kartu &rarr;
       </button>
     </div>

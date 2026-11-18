@@ -1,9 +1,9 @@
 /**
- * ULAR TANGGA SEJARAH — NEO-BRUTALIST EDITION
- * Fitur Lengkap:
- * 1. Konsistensi 100% Petak Pertanyaan (?): Hanya memicu soal jika mendarat tepat di petak bertanda '?'
- * 2. Modal Peringatan Konfirmasi saat ingin keluar ke Menu Utama atau Reset Game
- * 3. Mode Bermain Lawan AI Bot vs Lawan Orang (PvP) + Pengaturan Kesulitan Bot (Mudah, Normal, Sulit)
+ * ULAR TANGGA SEJARAH — NEO-BRUTALIST EDITION (FULL GAME.JS)
+ * Fitur Utama:
+ * 1. Konsistensi 100% Petak Pertanyaan (?): Hanya memicu soal jika berhenti tepat di petak bertanda '?'
+ * 2. Modal Peringatan Konfirmasi Keluar ke Menu Utama & Reset Game (dengan pembersih timer/session)
+ * 3. Mode Lawan AI Bot vs Lawan Orang (PvP) + Pengaturan Kesulitan Bot (Mudah, Normal, Sulit)
  * 4. Integrasi Gemini AI Live Chat (Smart Context Persona Engine + Cloud Gemini API Support)
  * 5. Kuis Pilihan Ganda 5 Opsi (A, B, C, D, E) & Esai Singkat
  */
@@ -173,19 +173,55 @@ const sound = new RetroSoundEngine();
 // ==========================================
 
 const PLAYER_CONFIGS = [
-  { id: 1, name: 'Player 1', botName: 'Bot Gajah Mada', short: 'P1', color: '#FF5757', badgeBg: 'bg-[#FF5757]', avatar: './assets/characters/char_1_red.png', persona: 'Tegas, bersemangat menyatukan Nusantara, suka memberi semangat.' },
-  { id: 2, name: 'Player 2', botName: 'Bot Kartini', short: 'P2', color: '#38B6FF', badgeBg: 'bg-[#38B6FF]', avatar: './assets/characters/char_2_blue.png', persona: 'Cerdas, tenang, suka membahas literasi dan fakta sejarah.' },
-  { id: 3, name: 'Player 3', botName: 'Bot Diponegoro', short: 'P3', color: '#FFDE59', badgeBg: 'bg-[#FFDE59]', avatar: './assets/characters/char_3_yellow.png', persona: 'Taktis, pantang menyerah, suka strategi menyalip lawan.' },
-  { id: 4, name: 'Player 4', botName: 'Bot Pattimura', short: 'P4', color: '#7ED957', badgeBg: 'bg-[#7ED957]', avatar: './assets/characters/char_4_green.png', persona: 'Berani, humoris, dan kompetitif di papan permainan.' }
+  {
+    id: 1,
+    name: 'Player 1',
+    botName: 'Bot Gajah Mada',
+    short: 'P1',
+    color: '#FF5757',
+    badgeBg: 'bg-[#FF5757]',
+    avatar: './assets/characters/char_1_red.png',
+    persona: 'Tegas, bersemangat menyatukan Nusantara, suka memberi semangat.'
+  },
+  {
+    id: 2,
+    name: 'Player 2',
+    botName: 'Bot Kartini',
+    short: 'P2',
+    color: '#38B6FF',
+    badgeBg: 'bg-[#38B6FF]',
+    avatar: './assets/characters/char_2_blue.png',
+    persona: 'Cerdas, tenang, suka membahas literasi dan fakta sejarah.'
+  },
+  {
+    id: 3,
+    name: 'Player 3',
+    botName: 'Bot Diponegoro',
+    short: 'P3',
+    color: '#FFDE59',
+    badgeBg: 'bg-[#FFDE59]',
+    avatar: './assets/characters/char_3_yellow.png',
+    persona: 'Taktis, pantang menyerah, suka strategi menyalip lawan.'
+  },
+  {
+    id: 4,
+    name: 'Player 4',
+    botName: 'Bot Pattimura',
+    short: 'P4',
+    color: '#7ED957',
+    badgeBg: 'bg-[#7ED957]',
+    avatar: './assets/characters/char_4_green.png',
+    persona: 'Berani, humoris, dan kompetitif di papan permainan.'
+  }
 ];
 
 const DICE_SPRITES = [
-  './assets/ui_icons/dice_sprites_0.png',
-  './assets/ui_icons/dice_sprites_1.png',
-  './assets/ui_icons/dice_sprites_2.png',
-  './assets/ui_icons/dice_sprites_3.png',
-  './assets/ui_icons/dice_sprites_4.png',
-  './assets/ui_icons/dice_sprites_5.png'
+  './assets/ui_icons/dice_sprites_0.jpg',
+  './assets/ui_icons/dice_sprites_1.jpg',
+  './assets/ui_icons/dice_sprites_2.jpg',
+  './assets/ui_icons/dice_sprites_3.jpg',
+  './assets/ui_icons/dice_sprites_4.jpg',
+  './assets/ui_icons/dice_sprites_5.jpg'
 ];
 
 // Koordinat Loncatan Tangga Presisi
@@ -210,6 +246,7 @@ const SNAKES = {
 
 // 12 Kartu Luck Streak
 const LUCK_CARDS = [
+  // --- 6 BUFF ---
   {
     id: 'kangaroo',
     type: 'buff',
@@ -258,6 +295,8 @@ const LUCK_CARDS = [
     template: './assets/ui_cards/card_buff_template.png',
     icon: './assets/ui_cards/icon_buff_tukarposisi.png'
   },
+
+  // --- 6 DEBUFF ---
   {
     id: 'roots',
     type: 'debuff',
@@ -384,6 +423,20 @@ const HISTORY_QUESTIONS = [
     answer: 'Mohammad Toha',
     fact: 'Mohammad Toha dan Ramdan berhasil menghancurkan gudang amunisi Sekutu pada Maret 1946 dalam peristiwa Bandung Lautan Api.'
   },
+  {
+    type: 'mcq',
+    question: 'Tokoh diplomat ulung Indonesia yang memimpin delegasi Republik Indonesia dalam Konferensi Meja Bundar (KMB) di Den Haag tahun 1949 adalah...',
+    options: ['Mohammad Hatta', 'Sutan Sjahrir', 'Agus Salim', 'Ali Sastroamidjojo', 'Amir Sjarifuddin'],
+    answer: 'Mohammad Hatta',
+    fact: 'Konferensi Meja Bundar (KMB) menghasilkan pengakuan kedaulatan Indonesia oleh Belanda pada 27 Desember 1949.'
+  },
+  {
+    type: 'mcq',
+    question: 'Julukan "Ayam Jantan dari Timur" diberikan oleh Belanda kepada pahlawan nasional dari Kesultanan Gowa-Tallo, yaitu...',
+    options: ['Sultan Hasanuddin', 'Sultan Ageng Tirtayasa', 'Sultan Iskandar Muda', 'Pangeran Sambernyawa', 'Tuanku Imam Bonjol'],
+    answer: 'Sultan Hasanuddin',
+    fact: 'Sultan Hasanuddin gigih melawan monopoli perdagangan VOC di Makassar sebelum ditandatanganinya Perjanjian Bongaya.'
+  },
 
   // --- ESAI SINGKAT ---
   {
@@ -441,11 +494,19 @@ const HISTORY_QUESTIONS = [
     hint: 'Kota Pahlawan di Jawa Timur.',
     answerDisplay: 'Surabaya',
     fact: 'Pertempuran 10 November 1945 di Surabaya terkenal dengan pidato pembakar semangat dari Bung Tomo.'
+  },
+  {
+    type: 'essay',
+    question: 'Siapakah nama penjahit bendera Pusaka Merah Putih yang dikibarkan saat Proklamasi 17 Agustus 1945?',
+    keywords: ['fatmawati', 'ibu fatmawati'],
+    hint: 'Ibu F........ (Istri Presiden Soekarno).',
+    answerDisplay: 'Ibu Fatmawati',
+    fact: 'Ibu Fatmawati menjahit Sang Saka Merah Putih menggunakan mesin jahit tangan dari bahan kain katun Jepang.'
   }
 ];
 
 // ==========================================
-// 4. STATE PERMAINAN & SETUP BOT
+// 4. STATE PERMAINAN & KONFIGURASI BOT
 // ==========================================
 
 const DIFFICULTY_INFO = {
@@ -467,6 +528,7 @@ const DIFFICULTY_INFO = {
 };
 
 const state = {
+  matchSessionId: 0, // Mencegah timer Bot lama berjalan jika game di-reset atau keluar ke menu
   players: [],
   currentTurnIndex: 0,
   isBusy: false,
@@ -478,15 +540,13 @@ const state = {
   quizTimerInterval: null,
   pendingConfirmAction: null,
 
-  // Konfigurasi Lobby sebelum mulai
   lobby: {
     vsBot: true,
     playerCount: 2,
     botDifficulty: 'medium',
-    slotIsBot: [false, true, true, true] // P1 Manusia, P2-P4 Bot secara default pada mode Bot
+    slotIsBot: [false, true, true, true]
   },
 
-  // Pengaturan Umum
   settings: {
     quizDensity: 20,      // Jumlah petak '?' di papan (12, 20, atau 30)
     quizType: 'mixed',    // 'mixed' | 'mcq' | 'essay'
@@ -577,7 +637,6 @@ const dom = {
   legendLadders: document.getElementById('legend-ladders'),
   legendSnakes: document.getElementById('legend-snakes'),
 
-  // Chat Elements
   chatMessages: document.getElementById('chat-messages'),
   chatInput: document.getElementById('chat-input'),
   btnSendChat: document.getElementById('btn-send-chat'),
@@ -638,11 +697,32 @@ const BOT_DIALOGUE_BANK = {
 };
 
 /**
- * Menghasilkan komentar AI dari Bot (Menggunakan Google Gemini API jika API key tersedia,
- * atau Smart Context Persona Engine secara instan tanpa delay/error).
+ * Menghasilkan respons pintar kontekstual jika pemain mengobrol di kolom chat
  */
-async function triggerBotCommentary(botPlayer, eventKey, contextDetail = '') {
+function buildSmartLocalReply(botPlayer, userMessage) {
+  const lower = userMessage.toLowerCase();
+  const leader = [...state.players].sort((a, b) => b.position - a.position)[0];
+
+  if (lower.includes('halo') || lower.includes('hai') || lower.includes('p') || lower.includes('pagi') || lower.includes('malam')) {
+    return `Halo juga! Aku sekarang di Petak #${botPlayer.position} dengan ${botPlayer.score} poin. Ayo semangat! 🙌`;
+  }
+  if (lower.includes('siapa') && (lower.includes('menang') || lower.includes('depan') || lower.includes('unggul'))) {
+    return `Sekarang ${leader.name} lagi memimpin di Petak #${leader.position}! Tapi tenang, masih bisa disalip pakai tangga atau kartu Swap! 🔥`;
+  }
+  if (lower.includes('ular') || lower.includes('awas')) {
+    return `Iya nih, paling ngeri ular di Petak 81 dan 94! Harus sedia kartu Perisai Anti-Ular terus! 🛡️🐍`;
+  }
+  if (lower.includes('curang') || lower.includes('hoki') || lower.includes('jago')) {
+    return `Hahaha murni strategi dan rajin baca buku sejarah dong! Makanya incar petak tanda tanya (?) biar maju terus! 😎📚`;
+  }
+
+  const list = BOT_DIALOGUE_BANK.human_reply;
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+async function triggerBotCommentary(botPlayer, eventKey, contextDetail = '', userChatText = '') {
   if (!botPlayer || !botPlayer.isBot) return;
+  const sessionAtStart = state.matchSessionId;
 
   dom.botTypingIndicator.classList.remove('hidden');
 
@@ -652,10 +732,10 @@ async function triggerBotCommentary(botPlayer, eventKey, contextDetail = '') {
   if (apiKey) {
     try {
       const standInfo = state.players.map((p) => `${p.name}: Petak #${p.position} (${p.score} pts)`).join(', ');
-      const prompt = `Kamu adalah karakter AI bernama "${botPlayer.name}" (${botPlayer.persona}) yang sedang bermain game papan Ular Tangga Sejarah Indonesia bergaya seru dan santai.
+      const prompt = `Kamu adalah karakter AI bernama "${botPlayer.name}" (${botPlayer.persona}) yang sedang bermain game papan Ular Tangga Sejarah Indonesia.
 Status papan saat ini: ${standInfo}.
-Kejadian yang baru saja terjadi: ${contextDetail || eventKey}.
-Berikan 1 kalimat komentar singkat (maksimal 18 kata) dalam bahasa Indonesia gaul/santai yang sopan dan seru sesuai kejadian tersebut, boleh pakai 1 emoji.`;
+Kejadian/Pesan saat ini: ${contextDetail || eventKey}.
+Berikan 1 kalimat komentar singkat (maksimal 18 kata) dalam bahasa Indonesia santai/gaul yang sopan dan seru, boleh pakai 1 emoji.`;
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
@@ -677,16 +757,21 @@ Berikan 1 kalimat komentar singkat (maksimal 18 kata) dalam bahasa Indonesia gau
         }
       }
     } catch (_) {
-      // Fallback ke Smart Persona Engine di bawah bila jaringan/key bermasalah
+      // Fallback otomatis ke Smart Local Engine bila jaringan atau key bermasalah
     }
   }
 
   if (!messageText) {
-    await new Promise((r) => setTimeout(r, 550));
-    const templates = BOT_DIALOGUE_BANK[eventKey] || BOT_DIALOGUE_BANK.human_reply;
-    messageText = templates[Math.floor(Math.random() * templates.length)];
+    await new Promise((r) => setTimeout(r, 500));
+    if (eventKey === 'human_reply' && userChatText) {
+      messageText = buildSmartLocalReply(botPlayer, userChatText);
+    } else {
+      const templates = BOT_DIALOGUE_BANK[eventKey] || BOT_DIALOGUE_BANK.human_reply;
+      messageText = templates[Math.floor(Math.random() * templates.length)];
+    }
   }
 
+  if (sessionAtStart !== state.matchSessionId) return;
   dom.botTypingIndicator.classList.add('hidden');
   appendChatMessage(botPlayer, messageText);
 }
@@ -721,19 +806,17 @@ function handleSendHumanChat() {
   if (!raw) return;
   dom.chatInput.value = '';
 
-  // Cari pemain manusia (default P1)
   const humanPlayer = state.players.find((p) => !p.isBot) || state.players[0];
   if (!humanPlayer) return;
 
   appendChatMessage(humanPlayer, raw);
 
-  // Jika ada Bot di pertandingan, salah satu Bot akan membalas komentar pemain
   const bots = state.players.filter((p) => p.isBot);
   if (bots.length > 0) {
     const responder = bots[Math.floor(Math.random() * bots.length)];
     setTimeout(() => {
-      triggerBotCommentary(responder, 'human_reply', `Pemain ${humanPlayer.name} berkata di chat: "${raw}"`);
-    }, 500);
+      triggerBotCommentary(responder, 'human_reply', `Pemain ${humanPlayer.name} berkata di chat: "${raw}"`, raw);
+    }, 450);
   }
 }
 
@@ -810,7 +893,7 @@ function buildBoardGrid() {
       cell.dataset.tile = tileNumber;
       cell.className = 'relative w-full h-full flex items-end justify-end p-0.5';
 
-      // Tanda '?' HANYA dipasang pada petak yang ada di state.historyTiles
+      // Tanda '?' HANYA dipasang pada petak yang terdaftar di state.historyTiles
       if (state.historyTiles.has(tileNumber)) {
         const badge = document.createElement('span');
         badge.className = 'quiz-tile-marker';
@@ -833,9 +916,7 @@ function populateHazardsLegend() {
     .join('');
 }
 
-// Render tampilan pemilihan Mode Lawan Bot vs PvP di Modal Play
 function renderLobbySetupUI() {
-  // Highlight tombol Mode (Bot vs PvP)
   if (state.lobby.vsBot) {
     dom.modeBtnBot.classList.replace('bg-white', 'bg-[#FFDE59]');
     dom.modeBtnPvp.classList.replace('bg-[#FFDE59]', 'bg-white');
@@ -846,7 +927,6 @@ function renderLobbySetupUI() {
     dom.botConfigSection.classList.add('hidden');
   }
 
-  // Highlight tombol Jumlah Pemain (2P, 3P, 4P)
   document.querySelectorAll('.player-count-btn').forEach((btn) => {
     const count = parseInt(btn.dataset.players, 10);
     if (count === state.lobby.playerCount) {
@@ -858,7 +938,6 @@ function renderLobbySetupUI() {
     }
   });
 
-  // Highlight tombol Kesulitan Bot
   document.querySelectorAll('.bot-diff-btn').forEach((btn) => {
     const diff = btn.dataset.diff;
     if (diff === state.lobby.botDifficulty) {
@@ -872,7 +951,6 @@ function renderLobbySetupUI() {
 
   dom.botDiffDesc.textContent = DIFFICULTY_INFO[state.lobby.botDifficulty].desc;
 
-  // Render Slot P1 - P4 agar pemain bisa memilih slot mana yang Manusia / Bot
   dom.slotPreviewContainer.innerHTML = '';
   for (let i = 0; i < state.lobby.playerCount; i++) {
     const cfg = PLAYER_CONFIGS[i];
@@ -903,6 +981,21 @@ function renderLobbySetupUI() {
   }
 }
 
+/**
+ * Menghentikan seluruh timer aktif & menaikkan matchSessionId saat keluar atau reset
+ */
+function abortActiveMatchSession() {
+  state.matchSessionId++;
+  state.isBusy = false;
+  if (state.quizTimerInterval) {
+    clearInterval(state.quizTimerInterval);
+    state.quizTimerInterval = null;
+  }
+  dom.modalQuiz.classList.add('hidden');
+  dom.modalLuckStreak.classList.add('hidden');
+  dom.botTypingIndicator.classList.add('hidden');
+}
+
 function bindEvents() {
   dom.btnQuickAudio.addEventListener('click', () => {
     sound.muted = !sound.muted;
@@ -911,7 +1004,6 @@ function bindEvents() {
     if (!sound.muted) sound.sfxClick();
   });
 
-  // Buka Modal Setup Pertandingan
   document.getElementById('btn-open-play').addEventListener('click', () => {
     sound.sfxClick();
     renderLobbySetupUI();
@@ -923,7 +1015,6 @@ function bindEvents() {
     dom.modalPlayerSelect.classList.add('hidden');
   });
 
-  // Pilih Mode Lawan Bot vs PvP
   dom.modeBtnBot.addEventListener('click', () => {
     sound.sfxClick();
     state.lobby.vsBot = true;
@@ -938,7 +1029,6 @@ function bindEvents() {
     renderLobbySetupUI();
   });
 
-  // Pilih Jumlah Pemain
   document.querySelectorAll('.player-count-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       sound.sfxClick();
@@ -947,7 +1037,6 @@ function bindEvents() {
     });
   });
 
-  // Pilih Kesulitan Bot
   document.querySelectorAll('.bot-diff-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       sound.sfxClick();
@@ -956,14 +1045,12 @@ function bindEvents() {
     });
   });
 
-  // Mulai Pertandingan
   dom.btnStartMatch.addEventListener('click', () => {
     sound.sfxClick();
     dom.modalPlayerSelect.classList.add('hidden');
     startNewGame();
   });
 
-  // Settings Modal
   const openSettings = () => {
     sound.sfxClick();
     dom.modalSettings.classList.remove('hidden');
@@ -1004,7 +1091,6 @@ function bindEvents() {
     dom.modalSettings.classList.add('hidden');
   });
 
-  // About Modal
   document.getElementById('btn-open-about').addEventListener('click', () => {
     sound.sfxClick();
     dom.modalAbout.classList.remove('hidden');
@@ -1036,7 +1122,7 @@ function bindEvents() {
     tabBtnHowto.classList.replace('bg-[#FFDE59]', 'bg-white');
   });
 
-  // Peringatan Konfirmasi saat tombol "<- Menu" atau "Reset" diklik
+  // Peringatan Konfirmasi Keluar ke Menu Utama
   document.getElementById('btn-back-menu').addEventListener('click', () => {
     sound.sfxClick();
     openConfirmModal(
@@ -1044,6 +1130,7 @@ function bindEvents() {
       'Apakah kamu yakin ingin meninggalkan pertandingan ini? Seluruh progress posisi bidak dan skor sejarah saat ini akan hilang!',
       'Ya, Keluar ke Menu',
       () => {
+        abortActiveMatchSession();
         dom.screenGame.classList.add('hidden');
         dom.screenMenu.classList.remove('hidden');
         sound.startBGM('menu');
@@ -1051,6 +1138,7 @@ function bindEvents() {
     );
   });
 
+  // Peringatan Konfirmasi Reset Pertandingan
   document.getElementById('btn-restart-game').addEventListener('click', () => {
     sound.sfxClick();
     openConfirmModal(
@@ -1058,6 +1146,7 @@ function bindEvents() {
       'Apakah kamu yakin ingin mengulang pertandingan dari Petak 1? Semua skor dan posisi saat ini akan di-reset.',
       'Ya, Reset Game',
       () => {
+        abortActiveMatchSession();
         startNewGame();
       }
     );
@@ -1078,31 +1167,30 @@ function bindEvents() {
     }
   });
 
-  // Gameplay Controls
   dom.btnRollDice.addEventListener('click', () => {
     const currentPlayer = state.players[state.currentTurnIndex];
-    if (currentPlayer && currentPlayer.isBot) return; // Cegah klik manual saat giliran Bot
+    if (currentPlayer && currentPlayer.isBot) return;
     handleRollDice();
   });
 
   dom.btnApplyCard.addEventListener('click', applySelectedLuckCard);
 
-  // Live Chat Input
   dom.btnSendChat.addEventListener('click', handleSendHumanChat);
   dom.chatInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') handleSendHumanChat();
   });
 
-  // Winner Modal
   document.getElementById('btn-win-rematch').addEventListener('click', () => {
     sound.sfxClick();
     dom.modalWinner.classList.add('hidden');
+    abortActiveMatchSession();
     startNewGame();
   });
 
   document.getElementById('btn-win-menu').addEventListener('click', () => {
     sound.sfxClick();
     dom.modalWinner.classList.add('hidden');
+    abortActiveMatchSession();
     dom.screenGame.classList.add('hidden');
     dom.screenMenu.classList.remove('hidden');
     sound.startBGM('menu');
@@ -1122,6 +1210,9 @@ function openConfirmModal(title, desc, proceedLabel, onProceed) {
 // ==========================================
 
 function startNewGame() {
+  state.matchSessionId++;
+  const currentSession = state.matchSessionId;
+
   generateRandomHistoryTiles();
   buildBoardGrid();
 
@@ -1165,10 +1256,10 @@ function startNewGame() {
   renderPlayerStats();
   updateTurnIndicator();
 
-  // Sambutan awal dari Bot di Room Chat
   const firstBot = state.players.find((p) => p.isBot);
   if (firstBot) {
     setTimeout(() => {
+      if (state.matchSessionId !== currentSession) return;
       triggerBotCommentary(firstBot, 'match_start', 'Pertandingan Ular Tangga Sejarah baru saja dimulai di Petak 1.');
     }, 600);
   }
@@ -1292,6 +1383,7 @@ function renderPlayerStats() {
 function updateTurnIndicator() {
   const currentPlayer = state.players[state.currentTurnIndex];
   if (!currentPlayer) return;
+  const sessionId = state.matchSessionId;
 
   dom.turnBadge.textContent = `TURN: ${currentPlayer.short}`;
   renderPlayerStats();
@@ -1300,6 +1392,7 @@ function updateTurnIndicator() {
     dom.btnRollDice.disabled = true;
     dom.diceResultText.textContent = `🤖 ${currentPlayer.name} bersiap...`;
     setTimeout(() => {
+      if (state.matchSessionId !== sessionId) return;
       if (!state.isBusy && state.players[state.currentTurnIndex]?.id === currentPlayer.id) {
         handleRollDice();
       }
@@ -1339,6 +1432,7 @@ function showBoardBanner(title, subtitle, duration = 1200) {
 function handleRollDice() {
   if (state.isBusy) return;
   const player = state.players[state.currentTurnIndex];
+  const sessionId = state.matchSessionId;
 
   if (player.skipTurn) {
     player.skipTurn = false;
@@ -1356,6 +1450,12 @@ function handleRollDice() {
   let ticks = 0;
   const maxTicks = 12;
   const rollInterval = setInterval(() => {
+    if (state.matchSessionId !== sessionId) {
+      clearInterval(rollInterval);
+      dom.diceBox.classList.remove('dice-shaking');
+      return;
+    }
+
     const randomFace = Math.floor(Math.random() * 6);
     dom.diceImg.src = DICE_SPRITES[randomFace];
     sound.sfxDiceTick();
@@ -1367,12 +1467,14 @@ function handleRollDice() {
       const rawRoll = Math.floor(Math.random() * 6) + 1;
       dom.diceImg.src = DICE_SPRITES[rawRoll - 1];
       sound.sfxDiceLand(rawRoll);
-      resolveDiceRoll(player, rawRoll);
+      resolveDiceRoll(player, rawRoll, sessionId);
     }
   }, 65);
 }
 
-async function resolveDiceRoll(player, rawRoll) {
+async function resolveDiceRoll(player, rawRoll, sessionId) {
+  if (state.matchSessionId !== sessionId) return;
+
   const mod = player.nextRollMod || 0;
   player.nextRollMod = 0;
 
@@ -1381,7 +1483,8 @@ async function resolveDiceRoll(player, rawRoll) {
   dom.diceResultText.textContent = `Dadu: ${rawRoll}${modText}`;
 
   const startPos = player.position;
-  await animatePawnSteps(player, finalSteps);
+  await animatePawnSteps(player, finalSteps, 1, sessionId);
+  if (state.matchSessionId !== sessionId) return;
 
   addLog(`🎲 <strong>${player.name}</strong> melempar dadu ${rawRoll}${modText}: Petak ${startPos} &rarr; <strong>Petak ${player.position}</strong>.`);
 
@@ -1391,24 +1494,25 @@ async function resolveDiceRoll(player, rawRoll) {
 
   if (checkVictory(player)) return;
 
-  // KONSISTEN 100%: Hanya memicu Kuis Sejarah jika petak tempat mendarat MEMANG memiliki tanda '?'
+  // KONSISTEN 100%: Hanya memicu Kuis Sejarah jika petak tempat mendarat memiliki tanda '?' di peta
   if (checkShouldTriggerQuiz(player.position)) {
-    openHistoryQuizModal(player, () => {
+    openHistoryQuizModal(player, sessionId, () => {
+      if (state.matchSessionId !== sessionId) return;
       if (checkVictory(player)) return;
-      checkBoardHazards(player, rawRoll === 6);
+      checkBoardHazards(player, rawRoll === 6, sessionId);
     });
   } else {
-    checkBoardHazards(player, rawRoll === 6);
+    checkBoardHazards(player, rawRoll === 6, sessionId);
   }
 }
 
-function animatePawnSteps(player, stepsCount, direction = 1) {
+function animatePawnSteps(player, stepsCount, direction = 1, sessionId = state.matchSessionId) {
   return new Promise((resolve) => {
     let remaining = Math.abs(stepsCount);
     let currentDir = direction;
 
     const stepTimer = setInterval(() => {
-      if (remaining <= 0) {
+      if (state.matchSessionId !== sessionId || remaining <= 0) {
         clearInterval(stepTimer);
         resolve();
         return;
@@ -1435,9 +1539,6 @@ function animatePawnSteps(player, stepsCount, direction = 1) {
   });
 }
 
-/**
- * Kuis Sejarah HANYA dipicu apabila petak tersebut terdaftar di state.historyTiles (memiliki tanda '?' di peta)
- */
 function checkShouldTriggerQuiz(tile) {
   return state.historyTiles.has(tile);
 }
@@ -1464,7 +1565,8 @@ function pickHistoryQuestion() {
   return chosen;
 }
 
-function openHistoryQuizModal(player, onCompleteCallback) {
+function openHistoryQuizModal(player, sessionId, onCompleteCallback) {
+  if (state.matchSessionId !== sessionId) return;
   sound.sfxQuizPopup();
   const qData = pickHistoryQuestion();
 
@@ -1487,7 +1589,7 @@ function openHistoryQuizModal(player, onCompleteCallback) {
   let answered = false;
 
   const finalizeAnswer = (isCorrect) => {
-    if (answered) return;
+    if (answered || state.matchSessionId !== sessionId) return;
     answered = true;
     clearInterval(state.quizTimerInterval);
     dom.quizBotStatus.classList.add('hidden');
@@ -1519,28 +1621,30 @@ function openHistoryQuizModal(player, onCompleteCallback) {
     }
 
     const proceedAfterQuiz = async () => {
+      if (state.matchSessionId !== sessionId) return;
       sound.sfxClick();
       dom.modalQuiz.classList.add('hidden');
 
       if (isCorrect) {
         addLog(`📜 <strong>${player.name}</strong> menjawab benar Kuis Sejarah! Maju bonus +2 langkah!`, 'buff');
-        await animatePawnSteps(player, 2, 1);
+        await animatePawnSteps(player, 2, 1, sessionId);
       } else {
         addLog(`📜 <strong>${player.name}</strong> belum tepat menjawab Kuis Sejarah. Mundur 1 langkah.`, 'debuff');
         if (player.position > 1) {
-          await animatePawnSteps(player, 1, -1);
+          await animatePawnSteps(player, 1, -1, sessionId);
         }
       }
 
-      onCompleteCallback();
+      if (state.matchSessionId === sessionId) {
+        onCompleteCallback();
+      }
     };
 
     dom.btnQuizContinue.onclick = proceedAfterQuiz;
 
-    // Jika giliran Bot, otomatis klik "Lanjutkan Permainan" setelah 1.8 detik
     if (player.isBot) {
       setTimeout(() => {
-        if (!dom.modalQuiz.classList.contains('hidden')) {
+        if (state.matchSessionId === sessionId && !dom.modalQuiz.classList.contains('hidden')) {
           proceedAfterQuiz();
         }
       }, 1800);
@@ -1548,6 +1652,13 @@ function openHistoryQuizModal(player, onCompleteCallback) {
   };
 
   state.quizTimerInterval = setInterval(() => {
+    if (state.matchSessionId !== sessionId) {
+      clearInterval(state.quizTimerInterval);
+      return;
+    }
+    // Pause hitung mundur apabila modal konfirmasi keluar sedang terbuka
+    if (!dom.modalConfirmLeave.classList.contains('hidden')) return;
+
     secondsLeft--;
     dom.quizTimerBadge.textContent = `⏱️ ${secondsLeft}s`;
     if (secondsLeft <= 0) {
@@ -1555,7 +1666,7 @@ function openHistoryQuizModal(player, onCompleteCallback) {
     }
   }, 1000);
 
-  // Render Pilihan Ganda 5 Opsi (A, B, C, D, E)
+  // Pilihan Ganda 5 Opsi (A, B, C, D, E)
   if (qData.type === 'mcq') {
     dom.quizTypeBadge.textContent = '📜 Kuis Sejarah — Pilihan Ganda (A - E)';
     dom.quizMcqContainer.classList.remove('hidden');
@@ -1574,7 +1685,7 @@ function openHistoryQuizModal(player, onCompleteCallback) {
         <span>${optText}</span>
       `;
       btn.addEventListener('click', () => {
-        if (player.isBot) return; // Cegah intervensi manual saat Bot berpikir
+        if (player.isBot) return;
         const isRight = optText === qData.answer;
         btn.classList.replace('bg-white', isRight ? 'bg-[#7ED957]' : 'bg-[#FF5757]');
         finalizeAnswer(isRight);
@@ -1582,13 +1693,12 @@ function openHistoryQuizModal(player, onCompleteCallback) {
       dom.quizMcqContainer.appendChild(btn);
     });
 
-    // Jika pemain adalah Bot, simulasikan pemilihan jawaban A-E berdasarkan tingkat kesulitan
     if (player.isBot) {
       const acc = DIFFICULTY_INFO[player.botDifficulty]?.accuracy || 0.7;
       const willAnswerCorrectly = Math.random() < acc;
 
       setTimeout(() => {
-        if (answered) return;
+        if (answered || state.matchSessionId !== sessionId) return;
         const allBtns = Array.from(dom.quizMcqContainer.querySelectorAll('button'));
         let chosenBtn = allBtns.find((b) => b.dataset.optionValue === qData.answer);
 
@@ -1607,7 +1717,7 @@ function openHistoryQuizModal(player, onCompleteCallback) {
       }, 1500);
     }
   } else {
-    // Render Esai Singkat
+    // Esai Singkat
     dom.quizTypeBadge.textContent = '✍️ Kuis Sejarah — Esai Singkat';
     dom.quizMcqContainer.classList.add('hidden');
     dom.quizEssayContainer.classList.remove('hidden');
@@ -1633,17 +1743,18 @@ function openHistoryQuizModal(player, onCompleteCallback) {
       if (e.key === 'Enter') submitEssay();
     };
 
-    // Jika pemain adalah Bot, simulasikan pengetikan jawaban esai
     if (player.isBot) {
       const acc = DIFFICULTY_INFO[player.botDifficulty]?.accuracy || 0.7;
       const willAnswerCorrectly = Math.random() < acc;
       const botTypedAnswer = willAnswerCorrectly ? qData.answerDisplay : 'Kurang Yakin';
 
       setTimeout(() => {
-        if (answered) return;
+        if (answered || state.matchSessionId !== sessionId) return;
         dom.quizEssayInput.value = botTypedAnswer;
         setTimeout(() => {
-          finalizeAnswer(willAnswerCorrectly);
+          if (state.matchSessionId === sessionId) {
+            finalizeAnswer(willAnswerCorrectly);
+          }
         }, 650);
       }, 1400);
     }
@@ -1656,7 +1767,8 @@ function openHistoryQuizModal(player, onCompleteCallback) {
 // 11. PENGECEKAN TANGGA, ULAR & KEMENANGAN
 // ==========================================
 
-function checkBoardHazards(player, rolledSix) {
+function checkBoardHazards(player, rolledSix, sessionId = state.matchSessionId) {
+  if (state.matchSessionId !== sessionId) return;
   let climbedLadder = false;
 
   if (LADDERS[player.position]) {
@@ -1674,8 +1786,9 @@ function checkBoardHazards(player, rolledSix) {
     }
 
     setTimeout(() => {
+      if (state.matchSessionId !== sessionId) return;
       if (checkVictory(player)) return;
-      postMoveResolution(player, rolledSix || climbedLadder);
+      postMoveResolution(player, rolledSix || climbedLadder, sessionId);
     }, 650);
     return;
   }
@@ -1689,7 +1802,7 @@ function checkBoardHazards(player, rolledSix) {
       addLog(`🛡️ Perisai Anti-Ular milik <strong>${player.name}</strong> menahan Ular di Petak ${player.position}!`, 'buff');
       updateAllPawns();
       renderPlayerStats();
-      postMoveResolution(player, rolledSix);
+      postMoveResolution(player, rolledSix, sessionId);
     } else {
       sound.sfxSnake();
       dom.boardWrapper.classList.add('board-shake');
@@ -1705,20 +1818,22 @@ function checkBoardHazards(player, rolledSix) {
       }
 
       setTimeout(() => {
-        postMoveResolution(player, rolledSix);
+        if (state.matchSessionId !== sessionId) return;
+        postMoveResolution(player, rolledSix, sessionId);
       }, 650);
     }
     return;
   }
 
-  postMoveResolution(player, rolledSix);
+  postMoveResolution(player, rolledSix, sessionId);
 }
 
-function postMoveResolution(player, triggerLuckStreak) {
+function postMoveResolution(player, triggerLuckStreak, sessionId = state.matchSessionId) {
+  if (state.matchSessionId !== sessionId) return;
   if (checkVictory(player)) return;
 
   if (triggerLuckStreak) {
-    openLuckStreakModal(player);
+    openLuckStreakModal(player, sessionId);
   } else {
     finishTurn();
   }
@@ -1760,7 +1875,8 @@ function advanceTurn() {
 // 12. KARTU "LUCK STREAK" (+ AUTO-PICK UNTUK BOT)
 // ==========================================
 
-function openLuckStreakModal(player) {
+function openLuckStreakModal(player, sessionId = state.matchSessionId) {
+  if (state.matchSessionId !== sessionId) return;
   state.selectedCard = null;
   state.swapTargetId = null;
   dom.luckOutcomePanel.classList.add('hidden');
@@ -1815,12 +1931,13 @@ function openLuckStreakModal(player) {
     wrapper.appendChild(inner);
 
     const flipThisCard = () => {
-      if (state.selectedCard) return;
+      if (state.selectedCard || state.matchSessionId !== sessionId) return;
       sound.sfxCardFlip();
       state.selectedCard = cardData;
       inner.classList.add('is-flipped');
 
       setTimeout(() => {
+        if (state.matchSessionId !== sessionId) return;
         dom.luckOutcomeTitle.textContent = `${cardData.name} (${cardData.type.toUpperCase()})`;
         dom.luckOutcomeDesc.textContent = cardData.desc;
 
@@ -1830,10 +1947,9 @@ function openLuckStreakModal(player) {
 
         dom.luckOutcomePanel.classList.remove('hidden');
 
-        // Jika giliran Bot, otomatis aktifkan kartu setelah 1.4 detik
         if (player.isBot) {
           setTimeout(() => {
-            if (!dom.modalLuckStreak.classList.contains('hidden')) {
+            if (state.matchSessionId === sessionId && !dom.modalLuckStreak.classList.contains('hidden')) {
               applySelectedLuckCard();
             }
           }, 1400);
@@ -1852,9 +1968,9 @@ function openLuckStreakModal(player) {
 
   dom.modalLuckStreak.classList.remove('hidden');
 
-  // Jika giliran Bot, otomatis pilih salah satu kartu setelah 1.1 detik
   if (player.isBot) {
     setTimeout(() => {
+      if (state.matchSessionId !== sessionId) return;
       const randomCardFn = cardInners[Math.floor(Math.random() * cardInners.length)];
       if (randomCardFn) randomCardFn();
     }, 1100);
@@ -1864,11 +1980,10 @@ function openLuckStreakModal(player) {
 function setupSwapInteractivePicker(player) {
   const playersAhead = state.players
     .filter((p) => p.id !== player.id && p.position > player.position)
-    .sort((a, b) => b.position - a.position); // Urutkan dari yang paling depan
+    .sort((a, b) => b.position - a.position);
 
   if (playersAhead.length === 0) return;
 
-  // Bot tingkat Hard otomatis mengincar pemain paling depan (pemimpin), selain itu pilih yang terdekat
   state.swapTargetId = playersAhead[0].id;
 
   dom.luckInteractiveOptions.innerHTML = '<div class="w-full text-xs font-black uppercase mb-1">Pilih Target Tukar Posisi:</div>';
@@ -1891,6 +2006,7 @@ function setupSwapInteractivePicker(player) {
 }
 
 async function applySelectedLuckCard() {
+  const sessionId = state.matchSessionId;
   const card = state.selectedCard;
   const player = state.players[state.currentTurnIndex];
   dom.modalLuckStreak.classList.add('hidden');
@@ -1913,7 +2029,7 @@ async function applySelectedLuckCard() {
   switch (card.id) {
     case 'kangaroo': {
       showBoardBanner('🦘 LOMPAT KANGGURU!', `${player.name} melompat +3 langkah!`, 1100);
-      await animatePawnSteps(player, 3, 1);
+      await animatePawnSteps(player, 3, 1, sessionId);
       addLog(`🦘 <strong>${player.name}</strong> melompat +3 langkah dengan <strong>Lompat Kangguru</strong> ke Petak ${player.position}!`, 'buff');
       break;
     }
@@ -1987,7 +2103,7 @@ async function applySelectedLuckCard() {
 
     case 'hungry_snake': {
       showBoardBanner('🐍 ULAR LAPAR!', `${player.name} mundur 2 langkah!`, 1100);
-      await animatePawnSteps(player, 2, -1);
+      await animatePawnSteps(player, 2, -1, sessionId);
       addLog(`🐍 <strong>${player.name}</strong> mundur 2 langkah karena <strong>Ular Lapar</strong> ke Petak ${player.position}.`, 'debuff');
       break;
     }
@@ -2041,10 +2157,12 @@ async function applySelectedLuckCard() {
     }
   }
 
+  if (state.matchSessionId !== sessionId) return;
   updateAllPawns();
   renderPlayerStats();
 
   setTimeout(() => {
+    if (state.matchSessionId !== sessionId) return;
     if (checkVictory(player)) return;
 
     if (LADDERS[player.position]) {
