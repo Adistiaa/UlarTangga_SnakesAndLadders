@@ -29,6 +29,10 @@ img,
   border-width: 3px;
 }
 
+.border-b-3 {
+  border-bottom-width: 3px;
+}
+
 .neo-btn {
   border: 3px solid #000000;
   box-shadow: var(--neo-shadow-sm);
@@ -68,10 +72,9 @@ img,
 }
 
 /* ==========================================================
-   CLEAN BOARD FRAME & PAWN STYLING (WHITE OUTLINE ONLY)
+   CLEAN BOARD FRAME, QUESTION TILE BADGE & PAWN STYLING
    ========================================================== */
 
-/* Bingkai papan secukupnya tanpa memotong gambar main_board_2d.png */
 .board-clean-frame {
   border: 2px solid #000000;
   box-shadow: 5px 5px 0px #000000;
@@ -86,6 +89,30 @@ img,
   bottom: 5.1%;
   left: 5.1%;
   right: 5.1%;
+}
+
+/* Indikator Petak Pertanyaan (?) di atas papan agar terlihat jelas dan konsisten */
+.quiz-tile-marker {
+  width: 20px;
+  height: 20px;
+  background-color: #FFDE59;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  color: #000000;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 900;
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  animation: quizBadgePulse 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes quizBadgePulse {
+  0% { transform: scale(0.95); }
+  100% { transform: scale(1.08); background-color: #FFF3B0; }
 }
 
 /* Pawn Wrapper tanpa bayangan elips di bawah kaki */
@@ -207,7 +234,6 @@ img,
   cursor: default;
 }
 
-/* Tanpa border tambahan atau latar putih karena aset kartu sudah memiliki border sendiri */
 .card-face {
   position: absolute;
   top: 0;
@@ -236,14 +262,17 @@ img,
   z-index: 1;
 }
 
-/* Custom Neo-Brutalist Scrollbar for Action Log */
-#action-log::-webkit-scrollbar {
-  width: 8px;
+/* Custom Neo-Brutalist Scrollbar for Action Log & Chat */
+#action-log::-webkit-scrollbar,
+#chat-messages::-webkit-scrollbar {
+  width: 7px;
 }
-#action-log::-webkit-scrollbar-track {
+#action-log::-webkit-scrollbar-track,
+#chat-messages::-webkit-scrollbar-track {
   background: #FFFDF5;
   border-left: 2px solid #000;
 }
-#action-log::-webkit-scrollbar-thumb {
+#action-log::-webkit-scrollbar-thumb,
+#chat-messages::-webkit-scrollbar-thumb {
   background: #000000;
 }
