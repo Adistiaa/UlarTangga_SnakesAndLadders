@@ -216,12 +216,12 @@ const PLAYER_CONFIGS = [
 ];
 
 const DICE_SPRITES = [
-  './assets/ui_icons/dice_sprites_0.jpg',
-  './assets/ui_icons/dice_sprites_1.jpg',
-  './assets/ui_icons/dice_sprites_2.jpg',
-  './assets/ui_icons/dice_sprites_3.jpg',
-  './assets/ui_icons/dice_sprites_4.jpg',
-  './assets/ui_icons/dice_sprites_5.jpg'
+  './assets/ui_icons/dice_sprites_0.png',
+  './assets/ui_icons/dice_sprites_1.png',
+  './assets/ui_icons/dice_sprites_2.png',
+  './assets/ui_icons/dice_sprites_3.png',
+  './assets/ui_icons/dice_sprites_4.png',
+  './assets/ui_icons/dice_sprites_5.png'
 ];
 
 // Koordinat Loncatan Tangga Presisi
